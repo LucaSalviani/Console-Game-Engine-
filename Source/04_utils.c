@@ -296,3 +296,52 @@ void clearBuffer() // IT ONLY WORKS FOR WINDOWS
     FlushConsoleInputBuffer(hInput);                // Cleans input buffer
 }
 
+
+
+COORD GetMouseConsolePosition() {
+    POINT cursorPos;
+    HWND consoleWindow = GetConsoleWindow();
+    COORD consolePos = { -1, -1 }; // Valor por defecto si hay error
+
+    if (consoleWindow == NULL) {
+        return consolePos;
+    }
+
+    GetCursorPos(&cursorPos); // Posición en pantalla
+    ScreenToClient(consoleWindow, &cursorPos); // Convertir a coordenadas dentro de la consola
+
+    // Obtener el tamaño de una celda de texto en la consola
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (!GetConsoleScreenBufferInfo(hConsole, &csbi)) {
+        return consolePos;
+    }
+
+    int FontSizeX = 8;
+    int FontSizeY = 16;
+    get_console_font_size(&FontSizeY, &FontSizeX);
+
+    int charWidth = FontSizeX;  // Ancho de un caracter en la consola (puede variar)
+    int charHeight = FontSizeY; // Alto de un caracter en la consola (puede variar)
+
+    // Convertir de píxeles a columnas y filas de la consola
+    consolePos.X = cursorPos.x / charWidth;
+    consolePos.Y = cursorPos.y / charHeight;
+
+    return consolePos;
+}
+
+void ConsoleCursor(int* y_buffer, int* x_buffer)
+{
+    COORD pos = GetMouseConsolePosition();
+    if (*y_buffer != pos.Y || *x_buffer != pos.X)
+    {
+        printf("\033[%d;%dH    ", *y_buffer, *x_buffer);
+    }
+    if (pos.X > 0 && pos.Y > 0)
+    {
+        printf("\033[%d;%dH<3<3", pos.Y, pos.X);
+        *x_buffer = pos.X;
+        *y_buffer = pos.Y;
+    }
+}

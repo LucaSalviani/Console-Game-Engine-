@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 #include <stdbool.h>
+#include <windows.h>
 
 void windowManagement(int wind_x, int wind_y, int wind_h, int wind_w);
 int randomBetween(int min, int max);
@@ -16,4 +17,6 @@ void disableResizeAndMaximize();
 void configureConsoleForGame();
 void enableAnsiEscapeCodes();
 void setConsoleFontSize(int fontSize);
+COORD GetMouseConsolePosition();
+void ConsoleCursor(int* y_buffer, int* x_buffer);
 #endif // UTILS_H

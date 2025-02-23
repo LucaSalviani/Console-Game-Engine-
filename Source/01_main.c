@@ -17,10 +17,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, int nCmdShow) {
     freopen("CONOUT$", "w", stdout);
     freopen("CONOUT$", "w", stderr);
 
-    const int consoleWidth = 1064;//1100
-    const int consoleHeight = 576;//576
+    const int consoleWidth = 4000;//1100
+    const int consoleHeight = 2000;//576
     disableResizeAndMaximize(); // Self explanatory
-    setConsoleFontSize(18);
+    setConsoleFontSize(7);
     configureConsoleForGame(); // Puts console in Raw mode and disables quick edit.
     windowManagement(450, 200, consoleHeight, consoleWidth);//Manages console position and size
     printf("\033[40m\033[2J");//Cleans the console and sets the background to black
@@ -47,19 +47,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, int nCmdShow) {
 
         //Windows size, everything will be based on it
 
-
-        //Font size, set them up at the standard but will later be checked by a handle
         int FontSizeX = 8;
         int FontSizeY = 16;
 
         //A position buffer that will go behind the snakes head
+        COORD pos = GetMouseConsolePosition();
         int x_buffer = 0;
         int y_buffer = 0;
 
-        // Random food position
-        int x_food = randomBetween(3, 47);
-        int y_food = randomBetween(3, 27);
-
+        
 
         //Starts random seed
         initializeRandomSeed();
@@ -67,7 +63,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, int nCmdShow) {
         printf("\033[?25l");//Hides cursor
         printf("\033[H");//Positions the cursor at the start of the console matrix
         printf("\033[40m\033[2J");//Cleans the console and sets the background to black
+        printf("%s", ANSI_COLOR_DARK_PINK);
 
+        while (1)
+        {
+          get_console_font_size(&FontSizeY, &FontSizeX);
+          ConsoleCursor(&y_buffer, &x_buffer);
+            
+            
+        }
     }
     return 0;
 }
